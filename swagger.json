@@ -1,0 +1,319 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "MetaFactory",
+		"version": "1.0.0"
+	},
+	"paths": {
+		"/user/register": {
+			"post": {
+				"tags": ["User"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"example": "P-6HJ9_KckFGZhGP"
+									},
+									"name": {
+										"type": "string",
+										"example": "John Doe"
+									},
+									"wallet": {
+										"type": "string",
+										"example": "0xFB81D866CAEE560DD566DF8A54F8C09BA9DDC7AD"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/user/get": {
+			"get": {
+				"tags": ["User"],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "wallet",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/user/update": {
+			"post": {
+				"tags": ["User"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"example": "John Doer"
+									},
+									"email": {
+										"type": "string",
+										"example": "john.doer@gmail.com"
+									},
+									"twitter": {
+										"type": "string",
+										"example": "johndoer"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/user/nonce": {
+			"get": {
+				"tags": ["User"],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+
+		"/file/upload": {
+			"post": {
+				"tags": ["File"],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+
+		"/mail/send": {
+			"post": {
+				"tags": ["Mail"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"to": {
+										"type": "string",
+										"example": "john.doe@gmail.com, jeniffer.doe@gmail.com"
+									},
+									"subject": {
+										"type": "string",
+										"example": "Mail subject"
+									},
+									"text": {
+										"type": "string",
+										"example": "Mail text"
+									},
+									"html": {
+										"type": "string",
+										"example": "<b>html example of sending email</b>"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+
+		"/project/create": {
+			"post": {
+				"tags": ["Project"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"example": "Project-1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/project/get": {
+			"get": {
+				"tags": ["Project"],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "inviteCode",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "createdBy",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/project/invite": {
+			"post": {
+				"tags": ["Project"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"inviteCode": {
+										"type": "string",
+										"example": "ABCDEFGH"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	"components": {
+		"schemas": {
+			"User": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"wallet": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"twitter": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "bool"
+					}
+				}
+			},
+			"project": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"inviteCode": {
+						"type": "string"
+					},
+					"canvas": {
+						"type": "string"
+					},
+					"library": {
+						"type": "Array of String"
+					},
+					"createdBy": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
