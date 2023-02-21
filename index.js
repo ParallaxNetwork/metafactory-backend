@@ -15,7 +15,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 const app = express()
-const port = process.env.port
+const port = process.env.PORT
 
 app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocument))
 
@@ -30,7 +30,7 @@ app.use('/project', projectRouter)
 
 // Connect to MongoDB
 mongoose.set('strictQuery', false)
-mongoose.connect(process.env.db)
+mongoose.connect(process.env.DB)
 
 // Start the server
 app.listen(port, () => {
