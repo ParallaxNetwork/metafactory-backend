@@ -38,7 +38,7 @@ export const mailSend = async (req, res) => {
 			})
 			.catch(console.error)
 
-		return res.status(200).send('send email...')
+		return res.status(200).send('Success: Sending Email')
 	} catch (error) {
 		return res.status(500).send(`Error: ${error}`)
 	}
