@@ -71,7 +71,7 @@ export const userLogin = async (req, res) => {
 			return res.status(400).send(`Error: Missing Field \n${missingField.join(', \n')}`)
 		}
 
-		const currUser = await User.findOne({ wallet: wallet, _id: id, isActive })
+		const currUser = await User.findOne({ wallet: wallet, _id: id, isActive: true })
 
 		if (!currUser) {
 			return res.status(400).send(`Error: No Current User with wallet(${wallet}) and id(${id})`)
@@ -100,7 +100,7 @@ export const userLogin = async (req, res) => {
 
 export const userUpdate = async (req, res) => {
 	try {
-		const currUser = await User.findOne({ _id: req.user.id, isActive })
+		const currUser = await User.findOne({ _id: req.user.id, isActive: true })
 		if (!currUser) {
 			return res.status(400).send(`Error: User with Id ${req.id} not found`)
 		}
