@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 dotenv.config()
+import User from '../models/user.js'
 
-export const verifyToken = (req, res, next) => {
+export const verifyJwt = async (req, res, next) => {
 	try {
 		const bearerHeader = req.headers['authorization']
 		if (typeof bearerHeader !== 'undefined') {
@@ -13,8 +14,13 @@ export const verifyToken = (req, res, next) => {
 			// verify token using jsonwebtoken module
 			try {
 				const decoded = jwt.verify(req.token, process.env.JWT_SECRET)
-				req.decoded = decoded
+				const currUser = await User.findOne({ _id: decoded.id, wallet: decoded.wallet, isActive: true })
+				
+				if (!currUser) {
+					return res.status(400).send(`Error: User with Id ${decoded.id} not found`)
+				}
 
+				req.user = currUser
 				next()
 			} catch (error) {
 				res.status(400).send('Invalid token')
@@ -28,5 +34,5 @@ export const verifyToken = (req, res, next) => {
 	}
 
 	// Comment this to enable authentication
-	next()
+	// next()
 }

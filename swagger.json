@@ -138,6 +138,11 @@
 						}
 					}
 				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -384,6 +389,14 @@
 						"type": "string"
 					}
 				}
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"name": "authorization",
+				"type": "http",
+				"scheme": "bearer",
+				"in": "header"
 			}
 		}
 	}

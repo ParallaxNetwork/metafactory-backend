@@ -92,7 +92,7 @@ export const userLogin = async (req, res) => {
 			process.env.JWT_SECRET
 		)
 
-		return res.status(200).send(`Success: Token ${token}`)
+		return res.status(200).send(`${token}`)
 	} catch (error) {
 		return res.status(500).send(`Error: ${error}`)
 	}
@@ -100,20 +100,17 @@ export const userLogin = async (req, res) => {
 
 export const userUpdate = async (req, res) => {
 	try {
-		const currUser = await User.findOne({ _id: req.user.id, isActive: true })
-		if (!currUser) {
-			return res.status(400).send(`Error: User with Id ${req.id} not found`)
-		}
+		const currUser = req.user
 
 		for (const key in req.body) {
-			if (key !== 'name' && key !== 'email' && key !== 'twitter') {
+			if (key == 'name' || key == 'email' || key == 'twitter') {
 				currUser[key] = req.body[key]
 			}
 		}
 
 		await currUser.save()
-
-		return res.status(200).send(`Success: Successfully updated ${req.id}`)
+		
+		return res.status(200).send(`Success: Successfully updated user with Id ${currUser._id}`)
 	} catch (error) {
 		return res.status(500).send(`Error: ${error}`)
 	}
