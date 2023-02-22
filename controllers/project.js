@@ -1,5 +1,6 @@
 import Project from '../models/project.js'
 import ProjectMember from '../models/projectMember.js'
+import User from '../models/user.js'
 
 import { isMember } from '../utils/project.js'
 import { sendReturn } from '../utils/return.js'
@@ -22,6 +23,7 @@ export const projectCreate = async (req, res) => {
 			roomId: roomId ? roomId : '',
 			roomKey: roomKey ? roomKey : '',
 			createdBy: req.user._id,
+			isPublic: false,
 			isActive: true,
 		}).save()
 
@@ -29,7 +31,7 @@ export const projectCreate = async (req, res) => {
 			_id: nanoid(),
 			userId: req.user._id,
 			projectId: newProject._id,
-			isActive: true
+			isActive: true,
 		}).save()
 
 		return sendReturn(200, true, `Created project with Id ${newProject._id}`, res)
@@ -77,19 +79,43 @@ export const projectInvite = async (req, res) => {
 
 export const projectGet = async (req, res) => {
 	try {
-		const { id, inCollaboration, isPublic } = req.query
+		let { id, isPublic, wallet } = req.query
 
-		let query = {}
-		id ? query['id'] = id : undefined
-		query['userId'] = req.user._id
-		query['isActive'] = true
-		const projects = await ProjectMember.find({...query})
-
-		for (const {projectId} of projects) {
-			console.log(projectId)
+		if (isPublic == null) {
+			isPublic = 'true'
 		}
 
-		return sendReturn(200, true, projects, res)
+		let currUser = {}
+		if (wallet) {
+			currUser = await User.findOne({ wallet: wallet, isActive: true })
+			if (!currUser) {
+				return sendReturn(400, false, `User with wallet ${wallet} not found`, res)
+			}
+		}
+
+		isPublic == 'true' ? (isPublic = true) : (isPublic = false)
+
+		let query = {}
+		id ? (query['projectId'] = id) : undefined
+		wallet ? (query['userId'] = currUser._id) : (query['userId'] = req.user._id)
+		query['isActive'] = true
+
+		const projects = await ProjectMember.find({ ...query })
+		console.log(query, projects)
+		let result = []
+
+		for (const { projectId } of projects) {
+			const project = await Project.findOne({ _id: projectId, isActive: true })
+			if (!project.isPublic && !wallet) {
+				if (!isPublic) {
+					result.push(project)
+				}
+			} else if (project.isPublic) {
+				result.push(project)
+			}
+		}
+
+		return sendReturn(200, true, result, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
 	}
@@ -105,7 +131,14 @@ export const projectUpdate = async (req, res) => {
 		const currProject = await Project.findOne({ _id: req.body.id, isActive: true })
 
 		for (const key in req.body) {
-			if (key == 'name' || key == 'canvas' || key == 'roomId' || key == 'roomKey' || key == 'thumbnail') {
+			if (
+				key == 'name' ||
+				key == 'canvas' ||
+				key == 'roomId' ||
+				key == 'roomKey' ||
+				key == 'thumbnail' ||
+				key == 'isPublic'
+			) {
 				currProject[key] = req.body[key]
 			}
 		}
@@ -133,6 +166,12 @@ export const projectDelete = async (req, res) => {
 
 		currProject.isActive = false
 		await currProject.save()
+
+		let projectMembers = await ProjectMember.find({ projectId: currProject._id })
+		for (let member of projectMembers) {
+			member.isActive = false
+			await member.save()
+		}
 
 		return sendReturn(200, true, `Successfully deleted project ${currProject.name}`, res)
 	} catch (error) {

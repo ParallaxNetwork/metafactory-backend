@@ -347,18 +347,18 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "id",
+						"name": "projectId",
 						"schema": { "type": "string" }
-					},
-					{
-						"in": "query",
-						"name": "inCollaboration",
-						"schema": { "type": "boolean" }
 					},
 					{
 						"in": "query",
 						"name": "isPublic",
 						"schema": { "type": "boolean" }
+					},
+					{
+						"in": "query",
+						"name": "wallet",
+						"schema": { "type": "string" }
 					}
 				],
 				"security": [
