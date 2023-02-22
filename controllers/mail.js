@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
 
+import { sendReturn } from '../utils/return.js'
+
 export const mailSend = async (req, res) => {
 	try {
 		const { to, subject, text, html } = req.body
@@ -11,7 +13,7 @@ export const mailSend = async (req, res) => {
 		html ? undefined : missingField.push('html')
 
 		if (missingField.length > 0) {
-			return res.status(400).send(`Error: Missing Field \n${missingField.join(', \n')}`)
+			return sendReturn(400, false, `Missing Field \n${missingField.join(', \n')}`, res)
 		}
 
 		const transporter = nodemailer.createTransport({
@@ -38,8 +40,8 @@ export const mailSend = async (req, res) => {
 			})
 			.catch(console.error)
 
-		return res.status(200).send('Success: Sending Email')
+		return sendReturn(200, true, 'Sending Email', res)
 	} catch (error) {
-		return res.status(500).send(`Error: ${error}`)
+		return sendReturn(500, false, String(error), res)
 	}
 }

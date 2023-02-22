@@ -7,7 +7,6 @@ const schema = new mongoose.Schema(
 		inviteCode: String,
 		canvas: String,
     thumbnail: String,
-		library: [{ id: String, data: String }],
 		roomId: String,
 		roomKey: String,
 		createdBy: String,

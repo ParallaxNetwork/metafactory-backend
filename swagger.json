@@ -47,10 +47,6 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"id": {
-										"type": "string",
-										"example": "P-6HJ9_KckFGZhGP"
-									},
 									"wallet": {
 										"type": "string",
 										"example": "0xf7F7a9A695A1eb550396ED46E13253187c30013e"
@@ -333,16 +329,6 @@
 										"example": "Project-update-1.1"
 									},
 									"canvas": { "type": "string" },
-									"library": {
-										"type": "array",
-										"items": {
-											"type": "object",
-											"properties": {
-												"id": { "type": "string" },
-												"data": { "type": "string" }
-											}
-										}
-									},
 									"roomId": { "type": "string" },
 									"roomKey": { "type": "string" }
 								}
@@ -350,6 +336,119 @@
 						}
 					}
 				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+
+		"/library/add": {
+			"post": {
+				"tags": ["Library"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": { "type": "string" },
+									"projectId": { "type": "string" },
+									"data": { "type": "string" }
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/library/update": {
+			"post": {
+				"tags": ["Library"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": { "type": "string" },
+									"projectId": { "type": "string" },
+									"data": { "type": "string" }
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/library/delete": {
+			"post": {
+				"tags": ["Library"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": { "type": "string" }
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/library/get": {
+			"get": {
+				"tags": ["Library"],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"schema": { "type": "string" }
+					},
+					{
+						"in": "query",
+						"name": "projectId",
+						"schema": { "type": "string" }
+					}
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -385,16 +484,6 @@
 					"inviteCode": { "type": "string" },
 					"canvas": { "type": "string" },
 					"thumbnail": { "type": "string" },
-					"library": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"properties": {
-								"id": { "type": "string" },
-								"data": { "type": "string" }
-							}
-						}
-					},
 					"roomId": { "type": "string" },
 					"roomKey": { "type": "string" },
 					"createdBy": { "type": "string" },

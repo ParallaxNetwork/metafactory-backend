@@ -10,6 +10,7 @@ import userRouter from './routes/user.js'
 import fileRouter from './routes/file.js'
 import mailRouter from './routes/mail.js'
 import projectRouter from './routes/project.js'
+import libraryRouter from './routes/library.js'
 
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -27,6 +28,7 @@ app.use('/user', userRouter)
 app.use('/file', fileRouter)
 app.use('/mail', mailRouter)
 app.use('/project', projectRouter)
+app.use('/library', libraryRouter)
 
 // Connect to MongoDB
 mongoose.set('strictQuery', false)

@@ -4,6 +4,9 @@ import { generateNonce, SiweMessage } from 'siwe'
 
 import User from '../models/user.js'
 
+import { sendReturn } from '../utils/return.js'
+import { nanoid } from 'nanoid'
+
 dotenv.config()
 
 export const userRegister = async (req, res) => {
@@ -16,13 +19,13 @@ export const userRegister = async (req, res) => {
 		wallet ? undefined : missingField.push('wallet')
 
 		if (missingField.length > 0) {
-			return res.status(400).send(`Error: Missing Field \n${missingField.join(', \n')}`)
+			return sendReturn(400, false, `Missing Field \n${missingField.join(', \n')}`, res)
 		}
 
 		const currUser = await User.findOne({ _id: id, wallet: wallet, isActive: true })
 
 		if (currUser) {
-			return res.status(400).send(`Error: User with wallet(${wallet}) and id(${id}) already registered`)
+			return sendReturn(400, false, `User with wallet(${wallet}) and id(${id}) already registered`, res)
 		}
 
 		await User({
@@ -34,9 +37,9 @@ export const userRegister = async (req, res) => {
 			isActive: true,
 		}).save()
 
-		return res.status(200).send(`Success: Registered User with Id ${id}`)
+		return sendReturn(200, true, `Registered User with Id ${id}`, res)
 	} catch (error) {
-		return res.status(500).send(`Error: ${error}`)
+		return sendReturn(500, false, String(error), res)
 	}
 }
 
@@ -44,17 +47,17 @@ export const userGet = async (req, res) => {
 	try {
 		const currUser = await User.findOne({ ...req.query, isActive: true })
 
-		return res.status(200).send(currUser)
+		return sendReturn(200, true, currUser, res)
 	} catch (error) {
-		return res.status(500).send(`Error: ${error}`)
+		return sendReturn(500, false, String(error), res)
 	}
 }
 
 export const userNonce = async (req, res) => {
 	try {
-		return res.status(200).send(generateNonce())
+		return sendReturn(200, true, generateNonce(), res)
 	} catch (error) {
-		return res.status(500).send(`Error: error`)
+		return sendReturn(500, false, String(error), res)
 	}
 }
 
@@ -66,37 +69,43 @@ export const userLogin = async (req, res) => {
 		message ? undefined : missingField.push('message')
 		signature ? undefined : missingField.push('signature')
 		wallet ? undefined : missingField.push('wallet')
-		id ? undefined : missingField.push('id')
 		nonce ? undefined : missingField.push('nonce')
 
 		if (missingField.length > 0) {
-			return res.status(400).send(`Error: Missing Field \n${missingField.join(', \n')}`)
+			return sendReturn(400, false, `Missing Field \n${missingField.join(', \n')}`, res)
 		}
 
-		const currUser = await User.findOne({ wallet: wallet, _id: id, isActive: true })
+		let currUser = await User.findOne({ wallet: wallet, isActive: true })
 
 		if (!currUser) {
-			return res.status(400).send(`Error: No Current User with wallet(${wallet}) and id(${id})`)
+			currUser = await new User({
+				_id: nanoid(),
+				name: wallet,
+				wallet: wallet,
+				email: "",
+				twitter: "",
+				isActive: true,
+			}).save()
 		}
 		
 		let siweMessage = new SiweMessage(message)
 		const validation = await siweMessage.validate(signature)
 
 		if (validation.nonce !== req.body.nonce) {
-			return res.status(400).send(`Error: Siwe verification failed with signature ${signature}`)
+			return sendReturn(400, false, `Siwe verification failed with signature ${signature}`, res)
 		}
 
 		const token = jwt.sign(
 			{
 				wallet: wallet,
-				id: id,
+				id: currUser._id,
 			},
 			process.env.JWT_SECRET
 		)
 
-		return res.status(200).send(`${token}`)
+		return sendReturn(200, true, token, res)
 	} catch (error) {
-		return res.status(500).send(`Error: ${error}`)
+		return sendReturn(500, false, String(error), res)
 	}
 }
 
@@ -112,8 +121,8 @@ export const userUpdate = async (req, res) => {
 
 		await currUser.save()
 		
-		return res.status(200).send(`Success: Successfully updated user with Id ${currUser._id}`)
+		return sendReturn(200, true, `Successfully updated user with Id ${currUser._id}`, res)
 	} catch (error) {
-		return res.status(500).send(`Error: ${error}`)
+		return sendReturn(500, false, String(error), res)
 	}
 }
