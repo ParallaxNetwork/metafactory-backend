@@ -345,7 +345,8 @@
 					{
 						"in": "query",
 						"name": "id",
-						"schema": { "type": "string" }
+						"schema": { "type": "string" },
+						"required": true
 					},
 					{
 						"in": "query",
@@ -473,7 +474,8 @@
 					{
 						"in": "query",
 						"name": "projectId",
-						"schema": { "type": "string" }
+						"schema": { "type": "string" },
+						"required": true
 					}
 				],
 				"security": [
@@ -514,7 +516,8 @@
 					"roomId": { "type": "string" },
 					"roomKey": { "type": "string" },
 					"createdBy": { "type": "string" },
-					"isActive": { "type": "boolean" }
+					"isActive": { "type": "boolean" },
+					"isPublic": { "type": "boolean" }
 				}
 			},
 			"library": {

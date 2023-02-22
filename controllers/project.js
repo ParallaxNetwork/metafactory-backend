@@ -25,6 +25,13 @@ export const projectCreate = async (req, res) => {
 			isActive: true,
 		}).save()
 
+		await new ProjectMember({
+			_id: nanoid(),
+			userId: req.user._id,
+			projectId: newProject._id,
+			isActive: true
+		}).save()
+
 		return sendReturn(200, true, `Created project with Id ${newProject._id}`, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)

@@ -10,6 +10,7 @@ const schema = new mongoose.Schema(
 		roomId: String,
 		roomKey: String,
 		createdBy: String,
+		isPublic: Boolean,
 		isActive: Boolean,
 	},
 	{ timestamps: true }
