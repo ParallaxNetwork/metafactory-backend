@@ -76,7 +76,7 @@ export const userLogin = async (req, res) => {
 		if (!currUser) {
 			return res.status(400).send(`Error: No Current User with wallet(${wallet}) and id(${id})`)
 		}
-
+		
 		let siweMessage = new SiweMessage(message)
 		const validation = await siweMessage.validate(signature)
 

@@ -38,6 +38,43 @@
 				}
 			}
 		},
+		"/user/login": {
+			"post": {
+				"tags": ["User"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"example": "P-6HJ9_KckFGZhGP"
+									},
+									"wallet": {
+										"type": "0xf7F7a9A695A1eb550396ED46E13253187c30013e"
+									},
+									"signature": {
+										"type": "0x9b668ab0daddb14467303430c2f8813e69a79cacc44b0dd926d9910ef9f4443c18611318be19f449bdf338153915a2fa61bc48bac41cb5385b74e01e5859f3cb1c"
+									},
+									"message": {
+										"type": "localhost:3000 wants you to sign in with your Ethereum account:\n0xf7F7a9A695A1eb550396ED46E13253187c30013e\n\nSign in with Ethereum to the app.\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1\nNonce: 3iUAwfC7rSQmocDiU\nIssued At: 2023-02-22T06:29:05.669Z"
+									},
+									"nonce": {
+										"type": "3iUAwfC7rSQmocDiU"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
 		"/user/get": {
 			"get": {
 				"tags": ["User"],
@@ -295,7 +332,7 @@
 			}
 		}
 	},
-	
+
 	"components": {
 		"schemas": {
 			"User": {
