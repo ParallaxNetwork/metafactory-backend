@@ -24,7 +24,7 @@
 									},
 									"wallet": {
 										"type": "string",
-										"example": "0xFB81D866CAEE560DD566DF8A54F8C09BA9DDC7AD"
+										"example": "0xf7F7a9A695A1eb550396ED46E13253187c30013e"
 									}
 								}
 							}
