@@ -4,7 +4,8 @@ const schema = new mongoose.Schema(
   {
     _id: { type: String },
     userId: String,
-    projectId: String
+    projectId: String,
+    isActive: Boolean
   },
   { timestamps: true }
 )

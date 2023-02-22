@@ -29,6 +29,8 @@ export const userRegister = async (req, res) => {
 			_id: id,
 			name: name,
 			wallet: wallet,
+			email: "",
+			twitter: "",
 			isActive: true,
 		}).save()
 

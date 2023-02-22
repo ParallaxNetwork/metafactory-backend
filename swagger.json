@@ -86,29 +86,21 @@
 					{
 						"in": "query",
 						"name": "id",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
 						"name": "name",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
 						"name": "wallet",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					}
 				],
 				"responses": {
-					"200": {
-						"description": "OK"
-					}
+					"200": { "description": "OK" }
 				}
 			}
 		},
@@ -237,12 +229,18 @@
 									"name": {
 										"type": "string",
 										"example": "Project-1"
-									}
+									},
+									"thumbnail": { "type": "string" }
 								}
 							}
 						}
 					}
 				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -257,30 +255,27 @@
 					{
 						"in": "query",
 						"name": "id",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
 						"name": "name",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
 						"name": "inviteCode",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
 						"name": "createdBy",
-						"schema": {
-							"type": "string"
-						}
+						"schema": { "type": "string" }
+					}
+				],
+				"security": [
+					{
+						"bearerAuth": []
 					}
 				],
 				"responses": {
@@ -308,6 +303,11 @@
 						}
 					}
 				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -324,15 +324,37 @@
 							"schema": {
 								"type": "object",
 								"properties": {
+									"id": {
+										"type": "string",
+										"example": "_WlAiE9kKTwTyYYVhs84Q"
+									},
 									"name": {
 										"type": "string",
 										"example": "Project-update-1.1"
-									}
+									},
+									"canvas": { "type": "string" },
+									"library": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"data": { "type": "string" }
+											}
+										}
+									},
+									"roomId": { "type": "string" },
+									"roomKey": { "type": "string" }
 								}
 							}
 						}
 					}
 				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -347,47 +369,36 @@
 			"User": {
 				"type": "object",
 				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"wallet": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"twitter": {
-						"type": "string"
-					},
-					"isActive": {
-						"type": "bool"
-					}
+					"id": { "type": "string" },
+					"name": { "type": "string" },
+					"wallet": { "type": "string" },
+					"email": { "type": "string" },
+					"twitter": { "type": "string" },
+					"isActive": { "type": "bool" }
 				}
 			},
 			"project": {
 				"type": "object",
 				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"inviteCode": {
-						"type": "string"
-					},
-					"canvas": {
-						"type": "string"
-					},
+					"id": { "type": "string" },
+					"name": { "type": "string" },
+					"inviteCode": { "type": "string" },
+					"canvas": { "type": "string" },
+					"thumbnail": { "type": "string" },
 					"library": {
-						"type": "Array of String"
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"id": { "type": "string" },
+								"data": { "type": "string" }
+							}
+						}
 					},
-					"createdBy": {
-						"type": "string"
-					}
+					"roomId": { "type": "string" },
+					"roomKey": { "type": "string" },
+					"createdBy": { "type": "string" },
+					"isActive": { "type": "bool" }
 				}
 			}
 		},
