@@ -89,7 +89,6 @@ export const libraryUpdate = async (req, res) => {
 
 		return sendReturn(200, true, `Successfully updated library with id ${id}`, res)
 	} catch (error) {
-		console.log(error)
 		return sendReturn(500, false, String(error), res)
 	}
 }

@@ -101,7 +101,7 @@ export const projectGet = async (req, res) => {
 		query['isActive'] = true
 
 		const projects = await ProjectMember.find({ ...query })
-		console.log(query, projects)
+		
 		let result = []
 
 		for (const { projectId } of projects) {

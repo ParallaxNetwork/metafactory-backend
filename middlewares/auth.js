@@ -29,7 +29,6 @@ export const verifyJwt = async (req, res, next) => {
 			res.status(400).send('Error: Forbidden, Authorization header is not defined')
 		}
 	} catch (error) {
-		console.log(error)
 		res.status(400).send(error.message)
 	}
 
