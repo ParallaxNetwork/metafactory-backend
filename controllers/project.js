@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 
 export const projectCreate = async (req, res) => {
 	try {
-		const { name, thumbnail } = req.body
+		const { name, thumbnail, canvas, roomId, roomKey } = req.body
 
 		if (!name) {
 			return sendReturn(400, false, 'Missing field name', res)
@@ -77,12 +77,17 @@ export const projectInvite = async (req, res) => {
 
 export const projectGet = async (req, res) => {
 	try {
-		const { id } = req.query
-		if (id) {
-			req.query._id = id
-			delete req.query.id
+		const { id, inCollaboration, isPublic } = req.query
+
+		let query = {}
+		id ? query['id'] = id : undefined
+		query['userId'] = req.user._id
+		query['isActive'] = true
+		const projects = await ProjectMember.find({...query})
+
+		for (const {projectId} of projects) {
+			console.log(projectId)
 		}
-		const projects = await Project.find({ ...req.query, isActive: true })
 
 		return sendReturn(200, true, projects, res)
 	} catch (error) {

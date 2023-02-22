@@ -226,7 +226,10 @@
 										"type": "string",
 										"example": "Project-1"
 									},
-									"thumbnail": { "type": "string" }
+									"canvas": { "type": "string" },
+									"thumbnail": { "type": "string" },
+									"roomId": { "type": "string" },
+									"roomKey": { "type": "string" }
 								}
 							}
 						}
@@ -345,23 +348,17 @@
 					{
 						"in": "query",
 						"name": "id",
-						"schema": { "type": "string" },
-						"required": true
-					},
-					{
-						"in": "query",
-						"name": "name",
 						"schema": { "type": "string" }
 					},
 					{
 						"in": "query",
-						"name": "inviteCode",
-						"schema": { "type": "string" }
+						"name": "inCollaboration",
+						"schema": { "type": "boolean" }
 					},
 					{
 						"in": "query",
-						"name": "createdBy",
-						"schema": { "type": "string" }
+						"name": "isPublic",
+						"schema": { "type": "boolean" }
 					}
 				],
 				"security": [
