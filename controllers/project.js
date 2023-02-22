@@ -17,10 +17,10 @@ export const projectCreate = async (req, res) => {
 			_id: nanoid(),
 			name: name,
 			inviteCode: nanoid(),
-			canvas: '',
+			canvas: canvas ? canvas : '',
 			thumbnail: thumbnail ? thumbnail : '',
-			roomId: '',
-			roomKey: '',
+			roomId: roomId ? roomId : '',
+			roomKey: roomKey ? roomKey : '',
 			createdBy: req.user._id,
 			isActive: true,
 		}).save()
@@ -38,9 +38,9 @@ export const projectInvite = async (req, res) => {
 		if (!inviteCode) {
 			return sendReturn(400, false, `Invite code empty`, res)
 		}
-		
+
 		const currProject = await Project.findOne({ inviteCode: inviteCode, isActive: true })
-		
+
 		if (!currProject) {
 			return sendReturn(400, false, `Project with invite code ${inviteCode} not found`, res)
 		}
@@ -85,7 +85,7 @@ export const projectGet = async (req, res) => {
 
 export const projectUpdate = async (req, res) => {
 	try {
-		const validateMember = await isMember(req.user._id, req.body.id, res)
+		const validateMember = await isMember(req.user._id, req.body.projectId, res)
 		if (!validateMember.success) {
 			return sendReturn(400, false, validateMember.message, res)
 		}
@@ -101,6 +101,28 @@ export const projectUpdate = async (req, res) => {
 		await currProject.save()
 
 		return sendReturn(200, true, `Successfully updated project ${currProject.name}`, res)
+	} catch (error) {
+		return sendReturn(500, false, String(error), res)
+	}
+}
+
+export const projectDelete = async (req, res) => {
+	try {
+		const validateMember = await isMember(req.user._id, req.body.id, res)
+		if (!validateMember.success) {
+			return sendReturn(400, false, validateMember.message, res)
+		}
+
+		let currProject = await Project.findOne({ _id: req.body.id, isActive: true })
+
+		if (!currProject) {
+			return sendReturn(400, false, `Project with id ${currProject._id} not found`, res)
+		}
+
+		currProject.isActive = false
+		await currProject.save()
+
+		return sendReturn(200, true, `Successfully deleted project ${currProject.name}`, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
 	}
