@@ -296,7 +296,8 @@
 									},
 									"canvas": { "type": "string" },
 									"roomId": { "type": "string" },
-									"roomKey": { "type": "string" }
+									"roomKey": { "type": "string" },
+									"isPublic": { "type": "boolean" }
 								}
 							}
 						}
