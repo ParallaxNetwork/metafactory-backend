@@ -79,7 +79,7 @@ export const projectInvite = async (req, res) => {
 
 export const projectGet = async (req, res) => {
 	try {
-		let { id, isPublic, wallet } = req.query
+		let { projectId, isPublic, wallet } = req.query
 
 		if (isPublic == null) {
 			isPublic = 'true'
@@ -96,16 +96,17 @@ export const projectGet = async (req, res) => {
 		isPublic == 'true' ? (isPublic = true) : (isPublic = false)
 
 		let query = {}
-		id ? (query['projectId'] = id) : undefined
+		projectId ? (query['projectId'] = projectId) : undefined
 		wallet ? (query['userId'] = currUser._id) : (query['userId'] = req.user._id)
 		query['isActive'] = true
-
+		
 		const projects = await ProjectMember.find({ ...query })
 		
 		let result = []
 
 		for (const { projectId } of projects) {
 			const project = await Project.findOne({ _id: projectId, isActive: true })
+			
 			if (!project.isPublic && !wallet) {
 				if (!isPublic) {
 					result.push(project)
