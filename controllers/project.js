@@ -129,7 +129,7 @@ export const projectUpdate = async (req, res) => {
 			return sendReturn(400, false, validateMember.message, res)
 		}
 
-		const currProject = await Project.findOne({ _id: req.body.id, isActive: true })
+		const currProject = await Project.findOne({ _id: req.body.projectId, isActive: true })
 
 		for (const key in req.body) {
 			if (
