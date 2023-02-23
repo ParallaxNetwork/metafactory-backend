@@ -286,7 +286,7 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"id": {
+									"projectId": {
 										"type": "string",
 										"example": "_WlAiE9kKTwTyYYVhs84Q"
 									},
