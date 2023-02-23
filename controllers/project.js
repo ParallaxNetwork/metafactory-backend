@@ -81,8 +81,10 @@ export const projectGet = async (req, res) => {
 	try {
 		let { projectId, isPublic, wallet } = req.query
 
-		if (isPublic == null) {
-			isPublic = 'true'
+		if (isPublic == 'true') {
+			isPublic = true
+		} else {
+			isPublic = false
 		}
 
 		let currUser = {}
@@ -92,8 +94,6 @@ export const projectGet = async (req, res) => {
 				return sendReturn(400, false, `User with wallet ${wallet} not found`, res)
 			}
 		}
-
-		isPublic == 'true' ? (isPublic = true) : (isPublic = false)
 
 		let query = {}
 		projectId ? (query['projectId'] = projectId) : undefined
@@ -108,7 +108,7 @@ export const projectGet = async (req, res) => {
 			const project = await Project.findOne({ _id: projectId, isActive: true })
 			
 			if (!project.isPublic && !wallet) {
-				if (!isPublic) {
+				if (!isPublic || isPublic == null) {
 					result.push(project)
 				}
 			} else if (project.isPublic) {
