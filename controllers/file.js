@@ -8,9 +8,9 @@ export const fileUpload = async (req, res) => {
 		}
 
 		const file = req.files.file
-		const { cid, url } = await ipfsStorageUpload(file)
+		const result = await ipfsStorageUpload(file)
 
-		return sendReturn(200, true, `cid: ${cid} \nurl: ${url}`, res)
+		return sendReturn(200, true, result, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
 	}
