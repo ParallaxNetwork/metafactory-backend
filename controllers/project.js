@@ -208,6 +208,21 @@ export const projectGetMember = async (req, res) => {
 
 		const projectMembers = await ProjectMember.find({ projectId: projectId, isActive: true })
 
+		let _projectMembers = []
+		for(let i=0; i<projectMembers.length; i++) {
+			// add User data by userId
+			const userData = await User.findOne({ _id: projectMembers[i].userId, isActive: true })
+			
+			// delete unnecessary user data
+			delete userData.createdAt
+			delete userData.updatedAt
+
+			_projectMembers.push({
+				...projectMembers[i],
+				user: userData
+			})
+		}
+
 		return sendReturn(200, true, projectMembers, res)
 	} catch (error) {
 		
