@@ -361,6 +361,33 @@
 						"in": "query",
 						"name": "wallet",
 						"schema": { "type": "string" }
+					},
+					{
+						"in": "query",
+						"name": "inviteCode",
+						"schema": { "type": "string" }
+					}
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/project/get/members": {
+			"get": {
+				"tags": ["Project"],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "projectId",
+						"schema": { "type": "string" }
 					}
 				],
 				"security": [

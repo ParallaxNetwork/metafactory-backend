@@ -79,11 +79,21 @@ export const projectInvite = async (req, res) => {
 
 export const projectGet = async (req, res) => {
 	try {
-		let { projectId, isPublic, wallet } = req.query
+		let { projectId, isPublic, wallet, inviteCode } = req.query
+
+		if (inviteCode) {
+			const project = await Project.findOne({ inviteCode: inviteCode, isActive: true })
+
+			if (!project) {
+				return sendReturn(400, false, `Project with invite code ${inviteCode} not found`, res)
+			}
+
+			return sendReturn(200, true, project, res)
+		}
 
 		if (isPublic == 'true') {
 			isPublic = true
-		} else {
+		} else if (isPublic == 'false') {
 			isPublic = false
 		}
 
@@ -112,7 +122,10 @@ export const projectGet = async (req, res) => {
 					result.push(project)
 				}
 			} else if (project.isPublic) {
-				result.push(project)
+				console.log(isPublic)
+				if (isPublic == null || isPublic == true) {
+					result.push(project)
+				}
 			}
 		}
 
@@ -177,5 +190,26 @@ export const projectDelete = async (req, res) => {
 		return sendReturn(200, true, `Successfully deleted project ${currProject.name}`, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
+	}
+}
+
+export const projectGetMember = async (req, res) => {
+	try {
+		const { projectId } = req.query
+		
+		if (!projectId) {
+			return sendReturn(400, false, `Project id empty`, res)
+		}
+
+		const validateMember = await isMember(req.user._id, projectId, res)
+		if (!validateMember.success) {
+			return sendReturn(400, false, validateMember.message, res)
+		}
+
+		const projectMembers = await ProjectMember.find({ projectId: projectId, isActive: true })
+
+		return sendReturn(200, true, projectMembers, res)
+	} catch (error) {
+		
 	}
 }
