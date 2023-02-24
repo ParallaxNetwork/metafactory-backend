@@ -71,6 +71,9 @@ export const projectInvite = async (req, res) => {
 			isActive: true,
 		}).save()
 
+		// update currProject.isPublic to true
+		await Project.updateOne({ _id: currProject._id }, { isPublic: true })
+
 		return sendReturn(200, true, `Added ${req.user.name} into ${currProject.name}`, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
@@ -214,8 +217,9 @@ export const projectGetMember = async (req, res) => {
 			const userData = await User.findOne({ _id: projectMembers[i].userId, isActive: true })
 			
 			// delete unnecessary user data
-			delete userData.createdAt
-			delete userData.updatedAt
+			delete userData._doc.createdAt
+			delete userData._doc.updatedAt
+			delete userData._doc.isActive
 
 			_projectMembers.push({
 				...projectMembers[i]._doc,
