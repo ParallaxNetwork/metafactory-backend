@@ -218,13 +218,13 @@ export const projectGetMember = async (req, res) => {
 			delete userData.updatedAt
 
 			_projectMembers.push({
-				...projectMembers[i],
+				...projectMembers[i]._doc,
 				user: userData
 			})
 		}
 
 		return sendReturn(200, true, _projectMembers, res)
 	} catch (error) {
-		
+		return sendReturn(500, false, String(error), res)
 	}
 }
