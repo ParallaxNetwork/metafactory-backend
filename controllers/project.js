@@ -223,7 +223,7 @@ export const projectGetMember = async (req, res) => {
 			})
 		}
 
-		return sendReturn(200, true, projectMembers, res)
+		return sendReturn(200, true, _projectMembers, res)
 	} catch (error) {
 		
 	}
