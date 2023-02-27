@@ -14,8 +14,10 @@ export const projectCreate = async (req, res) => {
 			return sendReturn(400, false, 'Missing field name', res)
 		}
 
+		const id = nanoid()
+
 		const newProject = await new Project({
-			_id: nanoid(),
+			_id: id,
 			name: name,
 			inviteCode: nanoid(),
 			canvas: canvas ? canvas : '',
@@ -34,7 +36,12 @@ export const projectCreate = async (req, res) => {
 			isActive: true,
 		}).save()
 
-		return sendReturn(200, true, `Created project with Id ${newProject._id}`, res)
+		const returnMessage = {
+			message: `Created project with Id ${newProject._id}`,
+			projectId: newProject._id,
+		}
+
+		return sendReturn(200, true, returnMessage, res)
 	} catch (error) {
 		return sendReturn(500, false, String(error), res)
 	}
