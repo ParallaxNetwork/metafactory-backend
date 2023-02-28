@@ -47,7 +47,6 @@ export const userGet = async (req, res) => {
 	try {
 		// if there is no query, query from req.user
 		if (Object.keys(req.query).length === 0) {
-			console.log(req.user)
 			req.query = { _id: req.user._id }
 		}
 

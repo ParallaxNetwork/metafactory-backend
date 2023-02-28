@@ -119,14 +119,14 @@ export const projectGet = async (req, res) => {
 		projectId ? (query['projectId'] = projectId) : undefined
 		wallet ? (query['userId'] = currUser._id) : (query['userId'] = req.user._id)
 		query['isActive'] = true
-		
+
 		const projects = await ProjectMember.find({ ...query })
-		
+
 		let result = []
 
 		for (const { projectId } of projects) {
 			const project = await Project.findOne({ _id: projectId, isActive: true })
-			
+
 			if (!project.isPublic && !wallet) {
 				if (!isPublic || isPublic == null) {
 					result.push(project)
@@ -137,6 +137,45 @@ export const projectGet = async (req, res) => {
 					result.push(project)
 				}
 			}
+		}
+
+		for (let i = 0; i < result.length; i++) {
+			const creatorData = await User.findOne({ _id: result[i].createdBy, isActive: true })
+
+			// delete unnecessary user data
+			delete creatorData?._doc.name
+			delete creatorData?._doc.createdAt
+			delete creatorData?._doc.updatedAt
+			delete creatorData?._doc.isActive
+			delete creatorData?._doc.__v
+
+
+			// assign creatorData to project
+			result[i]._doc.creatorData = creatorData
+
+			// get project members
+			const projectMembers = await ProjectMember.find({ projectId: result[i]._id, isActive: true })
+
+			let _projectMembers = []
+			for (let j = 0; j < projectMembers.length; j++) {
+				if(!projectMembers[j]?.userId) continue
+
+				if (projectMembers[j].userId === req.user._id) continue
+
+				const userData = await User.findOne({ _id: projectMembers[j].userId, isActive: true })
+
+				// delete unnecessary user data
+				delete userData._doc.createdAt
+				delete userData._doc.updatedAt
+				delete userData._doc.isActive
+
+				_projectMembers.push({
+					...userData._doc,
+				})
+			}
+
+			// assign projectMembers to project
+			result[i]._doc.projectMembers = _projectMembers
 		}
 
 		return sendReturn(200, true, result, res)
@@ -206,7 +245,7 @@ export const projectDelete = async (req, res) => {
 export const projectGetMember = async (req, res) => {
 	try {
 		const { projectId } = req.query
-		
+
 		if (!projectId) {
 			return sendReturn(400, false, `Project id empty`, res)
 		}
@@ -219,10 +258,10 @@ export const projectGetMember = async (req, res) => {
 		const projectMembers = await ProjectMember.find({ projectId: projectId, isActive: true })
 
 		let _projectMembers = []
-		for(let i=0; i<projectMembers.length; i++) {
+		for (let i = 0; i < projectMembers.length; i++) {
 			// add User data by userId
 			const userData = await User.findOne({ _id: projectMembers[i].userId, isActive: true })
-			
+
 			// delete unnecessary user data
 			delete userData._doc.createdAt
 			delete userData._doc.updatedAt
