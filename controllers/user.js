@@ -45,6 +45,11 @@ export const userRegister = async (req, res) => {
 
 export const userGet = async (req, res) => {
 	try {
+		// if there is no query, query from req.user
+		if (Object.keys(req.query).length === 0) {
+			req.query = { _id: req.user._id }
+		}
+
 		const currUser = await User.findOne({ ...req.query, isActive: true })
 
 		return sendReturn(200, true, currUser, res)
