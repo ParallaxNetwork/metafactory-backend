@@ -9,7 +9,7 @@ router.post('/register', userRegister)
 router.post('/login', userLogin)
 router.post('/update', verifyJwt, userUpdate)
 
-router.get('/get', userGet)
+router.get('/get', verifyJwt, userGet)
 router.get('/nonce', userNonce)
 
 export default router
