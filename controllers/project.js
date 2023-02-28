@@ -162,6 +162,8 @@ export const projectGet = async (req, res) => {
 
 				if (projectMembers[j].userId === req.user._id) continue
 
+				if (result[i].createdBy === projectMembers[j].userId) continue
+
 				const userData = await User.findOne({ _id: projectMembers[j].userId, isActive: true })
 
 				// delete unnecessary user data
