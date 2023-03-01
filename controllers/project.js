@@ -160,8 +160,6 @@ export const projectGet = async (req, res) => {
 			for (let j = 0; j < projectMembers.length; j++) {
 				if(!projectMembers[j]?.userId) continue
 
-				if (projectMembers[j].userId === req.user._id) continue
-
 				if (result[i].createdBy === projectMembers[j].userId) continue
 
 				const userData = await User.findOne({ _id: projectMembers[j].userId, isActive: true })
