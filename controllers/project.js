@@ -2,7 +2,7 @@ import Project from '../models/project.js'
 import ProjectMember from '../models/projectMember.js'
 import User from '../models/user.js'
 
-import { isMember } from '../utils/project.js'
+import { isMember, isOwner } from '../utils/project.js'
 import { sendReturn } from '../utils/return.js'
 import { nanoid } from 'nanoid'
 
@@ -216,7 +216,7 @@ export const projectUpdate = async (req, res) => {
 
 export const projectDelete = async (req, res) => {
 	try {
-		const validateMember = await isMember(req.user._id, req.body.id, res)
+		const validateMember = await isOwner(req.user._id, req.body.id, res)
 		if (!validateMember.success) {
 			return sendReturn(400, false, validateMember.message, res)
 		}

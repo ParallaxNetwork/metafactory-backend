@@ -39,3 +39,40 @@ export const isMember = async (userId, projectId, res) => {
 		}
 	}
 }
+
+export const isOwner = async (userId, projectId, res) => {
+	try {
+		if (!projectId) {
+			return {
+				success: false,
+				message: `Missing project id`,
+			}
+		}
+
+		const currProject = await Project.findOne({ _id: projectId, isActive: true })
+
+		if (!currProject) {
+			return {
+				success: false,
+				message: `Project with id ${projectId} not found`,
+			}
+		}
+
+		if (currProject.createdBy == userId) {
+			return {
+				success: true,
+				message: "OK",
+			}
+		}
+
+		return {
+			success: false,
+			message: "",
+		}
+	} catch (error) {
+		return {
+			success: false,
+			message: `${error}`,
+		}
+	}
+}

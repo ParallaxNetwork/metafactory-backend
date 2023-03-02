@@ -322,6 +322,7 @@
 		"/project/delete": {
 			"post": {
 				"tags": ["Project"],
+				"description": "Delete project, only owner can delete project",
 				"requestBody": {
 					"content": {
 						"application/json": {
