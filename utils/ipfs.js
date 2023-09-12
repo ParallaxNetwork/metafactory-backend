@@ -1,6 +1,8 @@
 import { ThirdwebStorage } from '@thirdweb-dev/storage'
 
-const storage = new ThirdwebStorage()
+const storage = new ThirdwebStorage({
+  secretKey: process.env.TW_SECRET_KEY
+})
 
 export const ipfsStorageUpload = async (data) => {
 	const uri = await storage.upload(data)
